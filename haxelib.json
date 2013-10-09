@@ -1,0 +1,11 @@
+{
+	"name": "gamecenter",
+	"url": "http://www.openfl.org",
+	"license": "",
+	"tags": [],
+	"description": "",
+	"version": "1.0.0",
+	"releasenote": "",
+	"contributors": [ "singmajesty" ],
+	"dependencies": {}
+}
