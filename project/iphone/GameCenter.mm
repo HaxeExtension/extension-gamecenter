@@ -35,6 +35,8 @@ typedef void (*FunctionType)();
     [super dealloc];
 }
 
+UIViewController *glView2;
+
 - (void)achievementViewControllerDidFinish:(GKAchievementViewController*)viewController
 {
     [viewController dismissModalViewControllerAnimated:YES];
@@ -190,9 +192,8 @@ namespace gamecenter
         {
 			leaderboardController.category = strCategory;
 			leaderboardController.leaderboardDelegate = viewDelegate;
-			UIViewController* glView2 = [[UIViewController alloc] init];
-			[window addSubview: glView2.view];
-			[glView2 presentModalViewController:leaderboardController animated:NO];
+            UIViewController *glView2 = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+            [glView2 presentModalViewController:leaderboardController animated: NO];
 		}
 		
 		[strCategory release];
@@ -241,10 +242,9 @@ namespace gamecenter
 		if(achievements != nil)
         {
 			achievements.achievementDelegate = viewDelegate;
-			UIViewController* glView2 = [[UIViewController alloc] init];
-			[window addSubview: glView2.view];
-			[glView2 presentModalViewController: achievements animated:NO];
-			//dispatchHaxeEvent(ACHIEVEMENTS_VIEW_OPENED);
+            UIViewController *glView2 = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+            [glView2 presentModalViewController: achievements animated: NO];
+            			//dispatchHaxeEvent(ACHIEVEMENTS_VIEW_OPENED);
 		}
     }
     

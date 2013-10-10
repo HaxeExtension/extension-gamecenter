@@ -183,7 +183,7 @@ class GameCenter {
 		initialize ();
 		
 		#if ios
-		Lib.pause ();
+		//Lib.pause ();
 		gamecenter_showachievements ();
 		#end
 		
@@ -195,7 +195,7 @@ class GameCenter {
 		initialize ();
 		
 		#if ios
-		Lib.pause ();
+//		Lib.pause ();
 		gamecenter_showleaderboard (categoryID);
 		#end
 		
