@@ -1,11 +1,11 @@
 {
 	"name": "gamecenter",
 	"url": "http://www.openfl.org",
-	"license": "",
+	"license": "MIT",
 	"tags": [],
-	"description": "",
-	"version": "1.0.0",
-	"releasenote": "",
+	"description": "Adds iOS GameCenter support",
+	"version": "1.0.1",
+	"releasenote": "Update license",
 	"contributors": [ "singmajesty" ],
 	"dependencies": {}
 }
