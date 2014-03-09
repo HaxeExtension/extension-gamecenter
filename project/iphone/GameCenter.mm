@@ -152,7 +152,9 @@ namespace gamecenter
 
             else
             {
-                sendGameCenterEvent(AUTH_FAILURE, "");
+                NSString* errorDescription = [error localizedDescription];
+                sendGameCenterEvent(AUTH_FAILURE, [errorDescription UTF8String]);
+                [errorDescription release];
             }
         }];
     }
