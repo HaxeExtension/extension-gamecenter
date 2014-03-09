@@ -102,43 +102,7 @@ class GameCenter {
         var type = Std.string (Reflect.field (inEvent, "type"));
         var data = Std.string (Reflect.field (inEvent, "data"));
 
-        switch (type) {
-
-            case "auth-success":
-
-                dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.AUTH_SUCCESS));
-
-            case "auth-failed":
-
-                dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.AUTH_FAILURE));
-
-            case "score-success":
-
-                dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.SCORE_SUCCESS));
-
-            case "score-failed":
-
-                dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.SCORE_FAILURE));
-
-            case "achieve-success":
-
-                dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_SUCCESS));
-
-            case "achieve-failed":
-
-                dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_FAILURE));
-
-            case "achieve-reset-success":
-
-                dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_RESET_SUCCESS));
-
-            case "achieve-reset-failed":
-
-                dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_RESET_FAILURE));
-
-            default:
-
-        }
+        dispatcher.dispatchEvent(new GameCenterEvent(type, data));
 
         #end
 

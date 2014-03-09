@@ -17,11 +17,15 @@ class GameCenterEvent extends Event {
   public static inline var ACHIEVEMENT_RESET_FAILURE = "achievementResetFailure";
 
 
-  public function new (type:String) {
+  public function new (type:String, data:String) {
 
     super (type);
 
+    this.data = data;
+
   }
+
+  public var data : String;
 
 
 }

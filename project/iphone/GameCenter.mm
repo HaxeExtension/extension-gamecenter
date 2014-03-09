@@ -62,6 +62,15 @@ namespace gamecenter
     static int isInitialized = 0;
     GKViewDelegate* viewDelegate;
 
+    static const char* AUTH_SUCCESS = "authSuccess";
+    static const char* AUTH_FAILURE = "authFailure";
+    static const char* SCORE_SUCCESS = "scoreSuccess";
+    static const char* SCORE_FAILURE = "scoreFailure";
+    static const char* ACHIEVEMENT_SUCCESS = "achievementSuccess";
+    static const char* ACHIEVEMENT_FAILURE = "achievementFailure";
+    static const char* ACHIEVEMENT_RESET_SUCCESS = "achievementResetSuccess";
+    static const char* ACHIEVEMENT_RESET_FAILURE = "achievementResetFailure";
+
     //---
 
     //User
@@ -138,12 +147,12 @@ namespace gamecenter
             if(error == nil)
             {
                 registerForAuthenticationNotification();
-                sendGameCenterEvent("auth-success", "");
+                sendGameCenterEvent(AUTH_SUCCESS, "");
             }
 
             else
             {
-                sendGameCenterEvent("auth-failed", "");
+                sendGameCenterEvent(AUTH_FAILURE, "");
             }
         }];
     }
@@ -216,13 +225,13 @@ namespace gamecenter
                 {
                     NSLog(@"Game Center: Error occurred reporting score-");
                     NSLog(@"  %@", [error userInfo]);
-                    sendGameCenterEvent("score-failed", categoryID);
+                    sendGameCenterEvent(SCORE_FAILURE, categoryID);
                 }
 
                 else
                 {
                     NSLog(@"Game Center: Score was successfully sent");
-                    sendGameCenterEvent("score-success", categoryID);
+                    sendGameCenterEvent(SCORE_SUCCESS, categoryID);
                 }
             }];
         }
@@ -255,12 +264,12 @@ namespace gamecenter
             if(error != nil)
             {
                 NSLog(@"  %@", [error userInfo]);
-                sendGameCenterEvent("achieve-reset-failed", "");
+                sendGameCenterEvent(ACHIEVEMENT_RESET_FAILURE, "");
             }
 
             else
             {
-                 sendGameCenterEvent("achieve-reset-success", "");
+                 sendGameCenterEvent(ACHIEVEMENT_RESET_SUCCESS, "");
             }
         }];
     }
@@ -285,13 +294,13 @@ namespace gamecenter
                 {
                     NSLog(@"Game Center: Error occurred reporting achievement-");
                     NSLog(@"  %@", [error userInfo]);
-                    sendGameCenterEvent("achieve-failed", achievementID);
+                    sendGameCenterEvent(ACHIEVEMENT_FAILURE, achievementID);
                 }
 
                 else
                 {
                     NSLog(@"Game Center: Achievement report successfully sent");
-                    sendGameCenterEvent("achieve-success", achievementID);
+                    sendGameCenterEvent(ACHIEVEMENT_SUCCESS, achievementID);
                 }
 
             }];
@@ -299,7 +308,7 @@ namespace gamecenter
 
         else
         {
-            sendGameCenterEvent("achieve-failed", achievementID);
+            sendGameCenterEvent(ACHIEVEMENT_FAILURE, achievementID);
         }
 
         [strAchievement release];
