@@ -10,237 +10,201 @@ import flash.Lib;
 
 
 class GameCenter {
-	
-	
-	public static var available (get, null):Bool;
-	
-	private static var dispatcher = new EventDispatcher ();
-	private static var initialized = false;
-	
-	
-	public static function addEventListener (type:String, listener:Dynamic, useCapture:Bool = false, priority:Int = 0, useWeakReference:Bool = false):Void {
-		
-		dispatcher.addEventListener (type, listener, useCapture, priority, useWeakReference);
-		
-	}
-	
-	
-	public static function authenticate ():Void {
-		
-		initialize ();
-		
-		#if ios
-		Lib.pause ();
-		gamecenter_authenticate ();
-		#end
-		
-	}
-	
-	
-	public static function dispatchEvent (event:Event):Bool {
-		
-		return dispatcher.dispatchEvent (event);
-		
-	}
-	
-	
-	public static function hasEventListener (type:String):Bool {
-		
-		return dispatcher.hasEventListener (type);
-		
-	}
-	
-	
-	private static function initialize ():Void {
-		
-		if (!initialized) {
-			
-			#if ios
-			gamecenter_set_event_handle (notifyListeners);
-			gamecenter_initialize ();
-			#end
-			
-			initialized = true;
-			
-		}
-		
-	}
-	
-	
-	public static function getPlayerName ():String {
-		
-		initialize ();
-		
-		#if ios
-		return gamecenter_playername ();
-		#else
-		return null;
-		#end
-		
-	}
-	
-	
-	public static function getPlayerID ():String {
-		
-		initialize ();
-		
-		#if ios
-		return gamecenter_playerid ();
-		#else
-		return null;
-		#end
-		
-	}
-	
-	
-	private static function notifyListeners (inEvent:Dynamic) {
-		
-		#if ios
-		
-		Lib.resume ();
-		
-		var type = Std.string (Reflect.field (inEvent, "type"));
-		var data = Std.string (Reflect.field (inEvent, "data"));
-		
-		switch (type) {
-			
-			case "auth-success":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.AUTH_SUCCESS));
-			
-			case "auth-failed":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.AUTH_FAILURE));
-			
-			case "score-success":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.SCORE_SUCCESS));
-			
-			case "score-failed":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.SCORE_FAILURE));
-			
-			case "achieve-success":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_SUCCESS));
-			
-			case "achieve-failed":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_FAILURE));
-			
-			case "achieve-reset-success":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_RESET_SUCCESS));
-			
-			case "achieve-reset-failed":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_RESET_FAILURE));
-			
-			default:
-			
-		}
-		
-		#end
-		
-	}
-	
-	
-	public static function reportAchievement (achievementID:String, percent:Float):Void {
-		
-		initialize ();
-		
-		#if ios
-		gamecenter_reportachievement (achievementID, percent);
-		#end
-		
-	}
-	
-	
-	public static function reportScore (categoryID:String, score:Int):Void {
-		
-		initialize ();
-		
-		#if ios
-		gamecenter_reportscore (categoryID, score);
-		#end
-		
-	}
-	
-	
-	public static function resetAchievements ():Void {
-		
-		initialize ();
-		
-		#if ios
-		gamecenter_resetachievements ();
-		#end
-		
-	}
-	
-	
-	public static function showAchievements ():Void {
-		
-		initialize ();
-		
-		#if ios
-		//Lib.pause ();
-		gamecenter_showachievements ();
-		#end
-		
-	}
-	
-	
-	public static function showLeaderboard (categoryID:String):Void {
-		
-		initialize ();
-		
-		#if ios
-//		Lib.pause ();
-		gamecenter_showleaderboard (categoryID);
-		#end
-		
-	}
-	
-	
-	
-	
-	// Get & Set Methods
-	
-	
-	
-	
-	private static function get_available ():Bool {
-		
-		#if ios
-		return gamecenter_isavailable ();
-		#else
-		return false;
-		#end
-		
-	}
-	
-	
-	
-	
-	// Native Methods
-	
-	
-	
-	
-	#if ios
-	private static var gamecenter_set_event_handle = Lib.load ("gamecenter", "gamecenter_set_event_handle", 1);
-	private static var gamecenter_initialize = Lib.load ("gamecenter", "gamecenter_initialize", 0);
-	private static var gamecenter_authenticate = Lib.load ("gamecenter", "gamecenter_authenticate", 0);
-	private static var gamecenter_isavailable = Lib.load ("gamecenter", "gamecenter_isavailable", 0);
-	private static var gamecenter_isauthenticated = Lib.load ("gamecenter", "gamecenter_isauthenticated", 0);
-	private static var gamecenter_playername = Lib.load ("gamecenter", "gamecenter_playername", 0);
-	private static var gamecenter_playerid = Lib.load ("gamecenter", "gamecenter_playerid", 0);
-	private static var gamecenter_showleaderboard = Lib.load ("gamecenter", "gamecenter_showleaderboard", 1);
-	private static var gamecenter_showachievements = Lib.load ("gamecenter", "gamecenter_showachievements", 0);
-	private static var gamecenter_reportscore = Lib.load ("gamecenter", "gamecenter_reportscore", 2);
-	private static var gamecenter_reportachievement = Lib.load ("gamecenter", "gamecenter_reportachievement", 2);
-	private static var gamecenter_resetachievements = Lib.load ("gamecenter", "gamecenter_resetachievements", 0);
-	#end
-	
-	
+
+
+    public static var available (get, null):Bool;
+
+    private static var dispatcher = new EventDispatcher ();
+    private static var initialized = false;
+
+
+    public static function addEventListener (type:String, listener:Dynamic, useCapture:Bool = false, priority:Int = 0, useWeakReference:Bool = false):Void {
+
+        dispatcher.addEventListener (type, listener, useCapture, priority, useWeakReference);
+
+    }
+
+
+    public static function authenticate ():Void {
+
+        initialize ();
+
+        #if ios
+        Lib.pause ();
+        gamecenter_authenticate ();
+        #end
+
+    }
+
+
+    public static function dispatchEvent (event:Event):Bool {
+
+        return dispatcher.dispatchEvent (event);
+
+    }
+
+
+    public static function hasEventListener (type:String):Bool {
+
+        return dispatcher.hasEventListener (type);
+
+    }
+
+
+    private static function initialize ():Void {
+
+        if (!initialized) {
+
+            #if ios
+            gamecenter_set_event_handle (notifyListeners);
+            gamecenter_initialize ();
+            #end
+
+            initialized = true;
+
+        }
+
+    }
+
+
+    public static function getPlayerName ():String {
+
+        initialize ();
+
+        #if ios
+        return gamecenter_playername ();
+        #else
+        return null;
+        #end
+
+    }
+
+
+    public static function getPlayerID ():String {
+
+        initialize ();
+
+        #if ios
+        return gamecenter_playerid ();
+        #else
+        return null;
+        #end
+
+    }
+
+
+    private static function notifyListeners (inEvent:Dynamic) {
+
+        #if ios
+
+        Lib.resume ();
+
+        var type = Std.string (Reflect.field (inEvent, "type"));
+        var data = Std.string (Reflect.field (inEvent, "data"));
+
+        dispatcher.dispatchEvent(new GameCenterEvent(type, data));
+
+        #end
+
+    }
+
+
+    public static function reportAchievement (achievementID:String, percent:Float):Void {
+
+        initialize ();
+
+        #if ios
+        gamecenter_reportachievement (achievementID, percent);
+        #end
+
+    }
+
+
+    public static function reportScore (categoryID:String, score:Int):Void {
+
+        initialize ();
+
+        #if ios
+        gamecenter_reportscore (categoryID, score);
+        #end
+
+    }
+
+
+    public static function resetAchievements ():Void {
+
+        initialize ();
+
+        #if ios
+        gamecenter_resetachievements ();
+        #end
+
+    }
+
+
+    public static function showAchievements ():Void {
+
+        initialize ();
+
+        #if ios
+        //Lib.pause ();
+        gamecenter_showachievements ();
+        #end
+
+    }
+
+
+    public static function showLeaderboard (categoryID:String):Void {
+
+        initialize ();
+
+        #if ios
+//      Lib.pause ();
+        gamecenter_showleaderboard (categoryID);
+        #end
+
+    }
+
+
+
+
+    // Get & Set Methods
+
+
+
+
+    private static function get_available ():Bool {
+
+        #if ios
+        return gamecenter_isavailable ();
+        #else
+        return false;
+        #end
+
+    }
+
+
+
+
+    // Native Methods
+
+
+
+
+    #if ios
+    private static var gamecenter_set_event_handle = Lib.load ("gamecenter", "gamecenter_set_event_handle", 1);
+    private static var gamecenter_initialize = Lib.load ("gamecenter", "gamecenter_initialize", 0);
+    private static var gamecenter_authenticate = Lib.load ("gamecenter", "gamecenter_authenticate", 0);
+    private static var gamecenter_isavailable = Lib.load ("gamecenter", "gamecenter_isavailable", 0);
+    private static var gamecenter_isauthenticated = Lib.load ("gamecenter", "gamecenter_isauthenticated", 0);
+    private static var gamecenter_playername = Lib.load ("gamecenter", "gamecenter_playername", 0);
+    private static var gamecenter_playerid = Lib.load ("gamecenter", "gamecenter_playerid", 0);
+    private static var gamecenter_showleaderboard = Lib.load ("gamecenter", "gamecenter_showleaderboard", 1);
+    private static var gamecenter_showachievements = Lib.load ("gamecenter", "gamecenter_showachievements", 0);
+    private static var gamecenter_reportscore = Lib.load ("gamecenter", "gamecenter_reportscore", 2);
+    private static var gamecenter_reportachievement = Lib.load ("gamecenter", "gamecenter_reportachievement", 2);
+    private static var gamecenter_resetachievements = Lib.load ("gamecenter", "gamecenter_resetachievements", 0);
+    #end
+
+
 }
