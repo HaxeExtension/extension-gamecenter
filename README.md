@@ -2,6 +2,7 @@ gamecenter
 ==========
 
 Before use you need to rebuild native modules:
+
 1. cd project
 2. haxelib run hxcpp Build.xml -Diphonesim -DHXCPP_ARMV7
 3. haxelib run hxcpp Build.xml -Diphonesim
