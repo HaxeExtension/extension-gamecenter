@@ -101,56 +101,24 @@ class GameCenter {
 		
 		var type = Std.string (Reflect.field (inEvent, "type"));
 		var data = Std.string (Reflect.field (inEvent, "data"));
-		
-		switch (type) {
-			
-			case "auth-success":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.AUTH_SUCCESS));
-			
-			case "auth-failed":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.AUTH_FAILURE));
-			
-			case "score-success":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.SCORE_SUCCESS));
-			
-			case "score-failed":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.SCORE_FAILURE));
-			
-			case "achieve-success":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_SUCCESS));
-			
-			case "achieve-failed":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_FAILURE));
-			
-			case "achieve-reset-success":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_RESET_SUCCESS));
-			
-			case "achieve-reset-failed":
-				
-				dispatcher.dispatchEvent (new GameCenterEvent (GameCenterEvent.ACHIEVEMENT_RESET_FAILURE));
-			
-			default:
-			
-		}
+		dispatcher.dispatchEvent(new GameCenterEvent(type, data));
 		
 		#end
 		
 	}
 	
-	
-	public static function reportAchievement (achievementID:String, percent:Float):Void {
+	/**
+        Reports changed in achievement completion.
+
+        @param achievementID The Achievement ID.
+        @param percentComplete The range of legal values is between 0.0 and 100.0, inclusive.
+    **/
+	public static function reportAchievement (achievementID:String, percentComplete:Float):Void {
 		
 		initialize ();
 		
 		#if ios
-		gamecenter_reportachievement (achievementID, percent);
+		gamecenter_reportachievement (achievementID, percentComplete);
 		#end
 		
 	}
