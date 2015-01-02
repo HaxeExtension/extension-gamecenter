@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Adds iOS GameCenter support",
-	"version": "1.0.2",
-	"releasenote": "Add arm64, x86_64 binaries",
+	"version": "1.0.3",
+	"releasenote": "Adding debugging messages to GameCenterEvent class",
 	"contributors": [ "singmajesty" ],
 	"dependencies": {}
 }

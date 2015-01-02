@@ -8,6 +8,7 @@ class GameCenterEvent extends Event {
 	
 	
 	public static inline var AUTH_SUCCESS = "authSuccess";
+	public static inline var AUTH_ALREADY = "authAlready";
 	public static inline var AUTH_FAILURE = "authFailure";
 	public static inline var SCORE_SUCCESS = "scoreSuccess";
 	public static inline var SCORE_FAILURE = "scoreFailure";
@@ -16,10 +17,12 @@ class GameCenterEvent extends Event {
 	public static inline var ACHIEVEMENT_RESET_SUCCESS = "achievementResetSuccess";
 	public static inline var ACHIEVEMENT_RESET_FAILURE = "achievementResetFailure";
 	
+	public var data : String;
 	
-	public function new (type:String) {
+	public function new (type:String, data:String) {
 		
 		super (type);
+		this.data = data;
 		
 	}
 	

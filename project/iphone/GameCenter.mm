@@ -89,6 +89,17 @@ namespace gamecenter
     void achievementViewDismissed();
 	void leaderboardViewDismissed();
 
+	//Events
+	static const char* AUTH_SUCCESS = "authSuccess";
+	static const char* AUTH_ALREADY = "authAlready";
+	static const char* AUTH_FAILURE = "authFailure";
+	static const char* SCORE_SUCCESS = "scoreSuccess";
+	static const char* SCORE_FAILURE = "scoreFailure";
+	static const char* ACHIEVEMENT_SUCCESS = "achievementSuccess";
+	static const char* ACHIEVEMENT_FAILURE = "achievementFailure";
+	static const char* ACHIEVEMENT_RESET_SUCCESS = "achievementResetSuccess";
+	static const char* ACHIEVEMENT_RESET_FAILURE = "achievementResetFailure";
+    
     //---
     
     //USER
@@ -113,7 +124,10 @@ namespace gamecenter
     
     bool isGameCenterAvailable()
     {
-		Class gcClass = (NSClassFromString(@"GKLocalPlayer"));    
+		// check for presence of GKLocalPlayer API
+		Class gcClass = (NSClassFromString(@"GKLocalPlayer"));
+		
+		// check if the device is running iOS 4.1 or later  
 		NSString* reqSysVer = @"4.1";   
 		NSString* currSysVer = [[UIDevice currentDevice] systemVersion];   
 		BOOL osVersionSupported = ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);   
@@ -130,22 +144,41 @@ namespace gamecenter
     {
         if(!isGameCenterAvailable())
         {
+			NSLog(@"Game Center: is not available");
 			return;
 		}
 		
-		[[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error) 
-        {     
-			if(error == nil)
-            {
-				registerForAuthenticationNotification();
-				sendGameCenterEvent("auth-success", "");
-			}
-            
-            else
-            {
-				sendGameCenterEvent("auth-failed", "");
-			}
-		}];
+		NSLog(@"Authenticating local user...");
+		if ([GKLocalPlayer localPlayer].authenticated == NO)
+		{
+
+	        GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+	        //[localPlayer authenticateWithCompletionHandler:^(NSError *error) { OLD CODE!
+	        [localPlayer setAuthenticateHandler:(^(UIViewController* viewcontroller, NSError *error)
+	        {
+	            if(localPlayer.isAuthenticated)
+	            {
+					NSLog(@"Game Center: You are logged in to game center.");
+					registerForAuthenticationNotification();
+					sendGameCenterEvent(AUTH_SUCCESS, "");
+	            }
+
+	            else if(error != nil)
+                {
+					NSLog(@"Game Center: Error occurred authenticating-");
+					NSLog(@"  %@", [error localizedDescription]);
+					NSString* errorDescription = [error localizedDescription];
+					sendGameCenterEvent(AUTH_FAILURE, [errorDescription UTF8String]);
+					[errorDescription release];
+	            }
+	        })];
+	    }
+
+	    else
+	    {
+	    	NSLog(@"Already authenticated!");
+			sendGameCenterEvent(AUTH_ALREADY, "");
+		}
 	}
     
     const char* getPlayerName()
@@ -216,13 +249,13 @@ namespace gamecenter
                 {
 					NSLog(@"Game Center: Error occurred reporting score-");
 					NSLog(@"  %@", [error userInfo]);
-					sendGameCenterEvent("score-failed", categoryID);
+					sendGameCenterEvent(SCORE_FAILURE, categoryID);
 				}
                 
                 else
                 {
 					NSLog(@"Game Center: Score was successfully sent");
-					sendGameCenterEvent("score-success", categoryID);
+					sendGameCenterEvent(SCORE_SUCCESS, categoryID);
 				}
 			}];   
 		}
@@ -255,43 +288,50 @@ namespace gamecenter
             if(error != nil)
             {
                 NSLog(@"  %@", [error userInfo]);
-                sendGameCenterEvent("achieve-reset-failed", "");
+                sendGameCenterEvent(ACHIEVEMENT_RESET_FAILURE, "");
             }
             
             else
             {
-                 sendGameCenterEvent("achieve-reset-success", "");
+                 sendGameCenterEvent(ACHIEVEMENT_RESET_SUCCESS, "");
             }
         }];
     }
     
-    void reportAchievement(const char* achievementID, float percent)
+    /*!
+	 * Reports changed in achievement completion.
+	 *
+	 * \param achievementID The Achievement ID.
+	 * \param percentComplete The range of legal values is between 0.0 and 100.0, inclusive.
+	 */
+    void reportAchievement(const char* achievementID, float percentComplete)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 		NSString* strAchievement = [[NSString alloc] initWithUTF8String:achievementID];
+		NSLog(@"Game Center: Report Achievements");
+    	NSLog(@"  %@", strAchievement);
 		GKAchievement* achievement = [[[GKAchievement alloc] initWithIdentifier:strAchievement] autorelease];
-        
 		if(achievement)
         {
-        	/*if(percent >= 1)
+        	/*if(percentComplete >= 100)
         	{
         		achievement.showsCompletionBanner = YES;
         	}*/
         	
-			achievement.percentComplete = percent;    
+			achievement.percentComplete = percentComplete;    
 			[achievement reportAchievementWithCompletionHandler:^(NSError *error)
             {
 				if(error != nil)
                 {
 					NSLog(@"Game Center: Error occurred reporting achievement-");
 					NSLog(@"  %@", [error userInfo]);
-					sendGameCenterEvent("achieve-failed", achievementID);
+					sendGameCenterEvent(ACHIEVEMENT_FAILURE, achievementID);
 				}
                 
                 else
                 {
 					NSLog(@"Game Center: Achievement report successfully sent");
-					sendGameCenterEvent("achieve-success", achievementID);
+					sendGameCenterEvent(ACHIEVEMENT_SUCCESS, achievementID);
 				}
                 
 			}];
@@ -299,7 +339,7 @@ namespace gamecenter
         
         else 
         {
-			sendGameCenterEvent("achieve-failed", achievementID);
+			sendGameCenterEvent(ACHIEVEMENT_FAILURE, achievementID);
 		}
 		
 		[strAchievement release];
@@ -326,20 +366,23 @@ namespace gamecenter
     {
 		if(!isGameCenterAvailable())
         {
+			NSLog(@"Game Center: is not available");
 			return;
 		}
 		
 		if([GKLocalPlayer localPlayer].isAuthenticated)
         {      
 			NSLog(@"Game Center: You are logged in to game center.");
+			sendGameCenterEvent(AUTH_SUCCESS, "");
 		}
         
         else
         {
 			NSLog(@"Game Center: You are NOT logged in to game center.");
+			sendGameCenterEvent(AUTH_FAILURE, "");
 		}
 	}
-    
+	
     void achievementViewDismissed()
     {
 		//dispatchHaxeEvent(ACHIEVEMENTS_VIEW_CLOSED);
