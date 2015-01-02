@@ -2,7 +2,7 @@ gamecenter
 ==========
 [![Build Status](https://travis-ci.org/openfl/gamecenter.png)](https://travis-ci.org/openfl/gamecenter)
 
-Provides an access to Apple GameCenter (iOS, Mac) for OpenFL projects using a common API.
+Provides access to Apple GameCenter (iOS, Mac) for OpenFL projects using a common API.
 
 Installation
 ------------
