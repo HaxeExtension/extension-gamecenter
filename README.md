@@ -2,20 +2,18 @@ gamecenter
 ==========
 [![Build Status](https://travis-ci.org/openfl/gamecenter.png)](https://travis-ci.org/openfl/gamecenter)
 
-Apple GameCenter 
-Provides an access to gamecenter (iOS, Mac) for OpenFL projects, using a common API.
+Provides an access to Apple GameCenter (iOS, Mac) for OpenFL projects using a common API.
 
 Installation
 ------------
 
     haxelib install gamecenter
-    lime rebuild gamecenter ios
 
 Then in a project file add:
 
     <haxelib name="gamecenter" />
 
-Trouble Shooting
+Troubleshooting
 ----------------
 
 If you are running on iOS 8.0 or greater you will need to manually enable Sandbox or else Authorization will fail.
@@ -26,10 +24,14 @@ In iOS, go to *Settings > Game Center* and manually enable Sandbox.
 Development Builds
 ------------------
 
-Clone the openfl-samples repository:
+Clone the gamecenter repository:
 
     git clone https://github.com/openfl/gamecenter
 
-Then follow standard installation steps.
+Tell haxelib where your development copy of gamecenter is installed:
 
-You must run ```lime rebuild gamecenter ios``` after modifying any modification of the native library code.
+    haxelib dev gamecenter gamecenter
+
+You can build the binaries using "lime rebuild"
+
+    lime rebuild gamecenter ios
