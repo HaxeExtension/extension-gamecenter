@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/openfl/gamecenter.png?label=ready)](https://waffle.io/openfl/gamecenter)
 [![Build Status](https://travis-ci.org/openfl/gamecenter.png)](https://travis-ci.org/openfl/gamecenter)
 GameCenter
 ==========
