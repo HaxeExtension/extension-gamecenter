@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/openfl/gamecenter.svg?style=flat)](https://travis-ci.org/openfl/gamecenter) [![Haxelib Version](https://img.shields.io/github/tag/openfl/gamecenter.svg?style=flat&label=release)](http://lib.haxe.org/p/gamecenter)
+[![Build Status](https://img.shields.io/travis/openfl/gamecenter.svg?style=flat)](https://travis-ci.org/openfl/gamecenter) [![Haxelib Version](https://img.shields.io/github/tag/openfl/gamecenter.svg?style=flat&label=haxelib)](http://lib.haxe.org/p/gamecenter)
 
 GameCenter
 ==========
