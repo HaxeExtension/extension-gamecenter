@@ -123,14 +123,14 @@ static value gamecenter_reportscore(value categoryID, value score)
 DEFINE_PRIM(gamecenter_reportscore, 2);
 
 
-static value gamecenter_reportachievement(value achievementID, value percent)
+static value gamecenter_reportachievement(value achievementID, value percent, value showCompletionBanner)
 {
 	#ifdef IPHONE
-	reportAchievement(val_string(achievementID),val_float(percent));
+	reportAchievement(val_string(achievementID),val_float(percent),val_bool(showCompletionBanner));
 	#endif
 	return alloc_null();
 }
-DEFINE_PRIM(gamecenter_reportachievement, 2);
+DEFINE_PRIM(gamecenter_reportachievement, 3);
 
 
 static value gamecenter_resetachievements()
