@@ -24,6 +24,11 @@ class GameCenter {
 		
 	}
 	
+	public static function removeEventListener (type:String, listener:Dynamic):Void {
+		
+		dispatcher.removeEventListener (type, listener);
+		
+	}
 	
 	public static function authenticate ():Void {
 		
