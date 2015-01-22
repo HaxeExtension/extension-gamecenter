@@ -117,13 +117,14 @@ class GameCenter {
 
         @param achievementID The Achievement ID.
         @param percentComplete The range of legal values is between 0.0 and 100.0, inclusive.
+        @param showCompletionBanner Indicates if GameCenter should display the completion banner for this achievement if completed.
     **/
-	public static function reportAchievement (achievementID:String, percentComplete:Float):Void {
+	public static function reportAchievement (achievementID:String, percentComplete:Float, showCompletionBanner:Bool=true):Void {
 		
 		initialize ();
 		
 		#if ios
-		gamecenter_reportachievement (achievementID, percentComplete);
+		gamecenter_reportachievement (achievementID, percentComplete, showCompletionBanner);
 		#end
 		
 	}
@@ -211,7 +212,7 @@ class GameCenter {
 	private static var gamecenter_showleaderboard = Lib.load ("gamecenter", "gamecenter_showleaderboard", 1);
 	private static var gamecenter_showachievements = Lib.load ("gamecenter", "gamecenter_showachievements", 0);
 	private static var gamecenter_reportscore = Lib.load ("gamecenter", "gamecenter_reportscore", 2);
-	private static var gamecenter_reportachievement = Lib.load ("gamecenter", "gamecenter_reportachievement", 2);
+	private static var gamecenter_reportachievement = Lib.load ("gamecenter", "gamecenter_reportachievement", 3);
 	private static var gamecenter_resetachievements = Lib.load ("gamecenter", "gamecenter_resetachievements", 0);
 	#end
 	

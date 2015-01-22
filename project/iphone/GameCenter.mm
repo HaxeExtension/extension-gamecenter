@@ -80,7 +80,7 @@ namespace gamecenter
     //Achievements
     void showAchievements();
     void resetAchievements();
-    void reportAchievement(const char* achievementID, float percent);
+    void reportAchievement(const char* achievementID, float percent, bool showCompletionBanner);
     
     //Callbacks
     void registerForAuthenticationNotification();
@@ -304,7 +304,7 @@ namespace gamecenter
 	 * \param achievementID The Achievement ID.
 	 * \param percentComplete The range of legal values is between 0.0 and 100.0, inclusive.
 	 */
-    void reportAchievement(const char* achievementID, float percentComplete)
+    void reportAchievement(const char* achievementID, float percentComplete, bool showCompletionBanner)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 		NSString* strAchievement = [[NSString alloc] initWithUTF8String:achievementID];
@@ -319,6 +319,7 @@ namespace gamecenter
         	}*/
         	
 			achievement.percentComplete = percentComplete;    
+			achievement.showsCompletionBanner = showCompletionBanner;
 			[achievement reportAchievementWithCompletionHandler:^(NSError *error)
             {
 				if(error != nil)
