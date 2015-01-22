@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Adds iOS GameCenter support",
-	"version": "1.1.0",
-	"releasenote": "Updated authentication, better consistency in named constants",
+	"version": "1.1.1",
+	"releasenote": "Add ability to hide achievement banner",
 	"contributors": [ "singmajesty" ],
 	"dependencies": {}
 }
