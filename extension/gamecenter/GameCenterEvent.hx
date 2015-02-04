@@ -19,6 +19,7 @@ class GameCenterEvent extends Event {
 	
 	public var data : String;
 	
+	
 	public function new (type:String, data:String) {
 		
 		super (type);
