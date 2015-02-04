@@ -169,7 +169,6 @@ namespace gamecenter
 					NSLog(@"  %@", [error localizedDescription]);
 					NSString* errorDescription = [error localizedDescription];
 					sendGameCenterEvent(AUTH_FAILURE, [errorDescription UTF8String]);
-					[errorDescription release];
 	            }
 	        })];
 	    }
