@@ -196,7 +196,7 @@ namespace gamecenter
         
         else
         {
-            return "";
+            return NULL;
         }
     }
     
@@ -211,7 +211,7 @@ namespace gamecenter
         
         else
         {
-            return "";
+            return NULL;
         }
     }
     
