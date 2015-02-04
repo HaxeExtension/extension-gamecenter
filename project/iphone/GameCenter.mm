@@ -162,7 +162,12 @@ namespace gamecenter
 					registerForAuthenticationNotification();
 					sendGameCenterEvent(AUTH_SUCCESS, "");
 	            }
-
+	            else if ( viewcontroller != nil )
+				{
+					NSLog(@"Game Center: User was not logged in. Show Login Screen.");
+					UIViewController *glView2 = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+					[glView2 presentModalViewController: viewcontroller animated : NO];
+				}
 	            else if(error != nil)
                 {
 					NSLog(@"Game Center: Error occurred authenticating-");
