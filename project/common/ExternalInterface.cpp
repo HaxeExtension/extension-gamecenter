@@ -156,11 +156,14 @@ extern "C" int gamecenter_register_prims() { return 0; }
 
 
 
-extern "C" void sendGameCenterEvent(const char* type, const char* data)
+extern "C" void sendGameCenterEvent(const char* type, const char* data1, const char* data2, const char* data3, const char* data4)
 {
     //printf("Send Event: %s\n", type);
     value o = alloc_empty_object();
     alloc_field(o,val_id("type"),alloc_string(type));
-    alloc_field(o,val_id("data"),alloc_string(data));
+    alloc_field(o,val_id("data1"),alloc_string(data1));
+    alloc_field(o,val_id("data2"),alloc_string(data2));
+    alloc_field(o,val_id("data3"),alloc_string(data3));
+    alloc_field(o,val_id("data4"),alloc_string(data4));
     val_call1(gameCenterEventHandle->get(), o);
 }

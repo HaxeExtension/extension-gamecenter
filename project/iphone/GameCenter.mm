@@ -2,9 +2,10 @@
 #import <UIKit/UIKit.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import <GameKit/GameKit.h>
+#define __STDC_FORMAT_MACROS // non needed in C, only in C++
+#include <inttypes.h>
 
-
-extern "C" void sendGameCenterEvent (const char* event, const char* data);
+extern "C" void sendGameCenterEvent (const char* event, const char* data1, const char* data2, const char* data3, const char* data4);
 
 
 typedef void (*FunctionType)();
@@ -159,7 +160,8 @@ namespace gamecenter {
 		NSString* reqSysVer = @"4.1";   
 		NSString* currSysVer = [[UIDevice currentDevice] systemVersion];   
 		BOOL osVersionSupported = ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);   
-		
+
+		NSLog(@"Game Center is available");
 		return (gcClass && osVersionSupported);
 		
 	}
@@ -186,16 +188,31 @@ namespace gamecenter {
 		if ([GKLocalPlayer localPlayer].authenticated == NO) {
 			
 			GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
-			//[localPlayer authenticateWithCompletionHandler:^(NSError *error) { OLD CODE!
-			
+
 			[localPlayer setAuthenticateHandler:(^(UIViewController* viewcontroller, NSError *error) {
 				
 				if (localPlayer.isAuthenticated) {
 					
 					NSLog (@"Game Center: You are logged in to game center.");
-					registerForAuthenticationNotification ();
-					sendGameCenterEvent (AUTH_SUCCESS, "");
-					
+					registerForAuthenticationNotification();
+
+					[localPlayer generateIdentityVerificationSignatureWithCompletionHandler:^(NSURL *publicKeyUrl, NSData *signature, NSData *salt, uint64_t timestamp, NSError *error)
+					{
+						if(error != nil)
+						{
+							return; //some sort of error, can't authenticate right now
+						}
+
+						NSString* urlString = [publicKeyUrl absoluteString];
+
+						char timestampBuf[256];
+                        snprintf(timestampBuf, sizeof timestampBuf, "%"PRIu64, timestamp);
+                        NSLog(@"SALT: %@", salt);
+
+						//[self verifyPlayer:localPlayer.playerID publicKeyUrl:publicKeyUrl signature:signature salt:salt timestamp:timestamp];
+						sendGameCenterEvent (AUTH_SUCCESS, [urlString UTF8String], [[signature base64EncodedStringWithOptions:0] UTF8String], [[salt base64EncodedStringWithOptions:0] UTF8String], timestampBuf);
+					}];
+
 				} else if (viewcontroller != nil) {
 					
 					NSLog (@"Game Center: User was not logged in. Show Login Screen.");
@@ -207,7 +224,7 @@ namespace gamecenter {
 					NSLog (@"Game Center: Error occurred authenticating-");
 					NSLog (@"  %@", [error localizedDescription]);
 					NSString* errorDescription = [error localizedDescription];
-					sendGameCenterEvent (AUTH_FAILURE, [errorDescription UTF8String]);
+					sendGameCenterEvent (AUTH_FAILURE, [errorDescription UTF8String], "", "", "");
 					
 				}
 				
@@ -216,7 +233,7 @@ namespace gamecenter {
 		} else {
 			
 			NSLog (@"Already authenticated!");
-			sendGameCenterEvent (AUTH_ALREADY, "");
+			sendGameCenterEvent (AUTH_ALREADY, "", "", "", "");
 			
 		}
 		
@@ -303,12 +320,12 @@ namespace gamecenter {
 					
 					NSLog (@"Game Center: Error occurred reporting score-");
 					NSLog (@"  %@", [error userInfo]);
-					sendGameCenterEvent (SCORE_FAILURE, categoryID);
+					sendGameCenterEvent (SCORE_FAILURE, categoryID, "", "", "");
 					
 				} else {
 					
 					NSLog (@"Game Center: Score was successfully sent");
-					sendGameCenterEvent (SCORE_SUCCESS, categoryID);
+					sendGameCenterEvent (SCORE_SUCCESS, categoryID, "", "", "");
 					
 				}
 				
@@ -354,11 +371,11 @@ namespace gamecenter {
 			if (error != nil) {
 				
 				NSLog (@"  %@", [error userInfo]);
-				sendGameCenterEvent (ACHIEVEMENT_RESET_FAILURE, "");
+				sendGameCenterEvent (ACHIEVEMENT_RESET_FAILURE, "", "", "", "");
 				
 			} else {
 				
-				sendGameCenterEvent(ACHIEVEMENT_RESET_SUCCESS, "");
+				sendGameCenterEvent(ACHIEVEMENT_RESET_SUCCESS, "", "", "", "");
 				
 			}
 			
@@ -397,12 +414,12 @@ namespace gamecenter {
 					
 					NSLog (@"Game Center: Error occurred reporting achievement-");
 					NSLog (@"  %@", [error userInfo]);
-					sendGameCenterEvent (ACHIEVEMENT_FAILURE, achievementID);
+					sendGameCenterEvent (ACHIEVEMENT_FAILURE, achievementID, "", "", "");
 					
 				} else {
 					
 					NSLog (@"Game Center: Achievement report successfully sent");
-					sendGameCenterEvent (ACHIEVEMENT_SUCCESS, achievementID);
+					sendGameCenterEvent (ACHIEVEMENT_SUCCESS, achievementID, "", "", "");
 					
 				}
 				
@@ -410,7 +427,7 @@ namespace gamecenter {
 			
 		} else {
 			
-			sendGameCenterEvent (ACHIEVEMENT_FAILURE, achievementID);
+			sendGameCenterEvent (ACHIEVEMENT_FAILURE, achievementID, "", "", "");
 			
 		}
 		
@@ -447,12 +464,13 @@ namespace gamecenter {
 		if ([GKLocalPlayer localPlayer].isAuthenticated) {
 			
 			NSLog (@"Game Center: You are logged in to game center.");
-			sendGameCenterEvent (AUTH_SUCCESS, "");
-			
+
+			sendGameCenterEvent (AUTH_SUCCESS, "", "", "", "");
+
 		} else {
 			
 			NSLog (@"Game Center: You are NOT logged in to game center.");
-			sendGameCenterEvent (AUTH_FAILURE, "");
+			sendGameCenterEvent (AUTH_FAILURE, "", "", "", "");
 			
 		}
 		

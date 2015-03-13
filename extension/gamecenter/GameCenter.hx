@@ -105,8 +105,11 @@ class GameCenter {
 		Lib.resume ();
 		
 		var type = Std.string (Reflect.field (inEvent, "type"));
-		var data = Std.string (Reflect.field (inEvent, "data"));
-		dispatcher.dispatchEvent(new GameCenterEvent(type, data));
+		var data1 = Std.string (Reflect.field (inEvent, "data1"));
+		var data2 = Std.string (Reflect.field (inEvent, "data2"));
+		var data3 = Std.string (Reflect.field (inEvent, "data3"));
+		var data4 = Std.string (Reflect.field (inEvent, "data4"));
+		dispatcher.dispatchEvent(new GameCenterEvent(type, data1, data2, data3, data4));
 		
 		#end
 		
