@@ -198,9 +198,11 @@ namespace gamecenter {
 
 					[localPlayer generateIdentityVerificationSignatureWithCompletionHandler:^(NSURL *publicKeyUrl, NSData *signature, NSData *salt, uint64_t timestamp, NSError *error)
 					{
-						if(error != nil)
-						{
-							return; //some sort of error, can't authenticate right now
+						if(error != nil) {
+						    // some sort of error, can't authenticate with url/signature/salt
+						    // but authentication did succeed according to GameCenter so report it
+						    sendGameCenterEvent (AUTH_SUCCESS, "", "", "", "");
+						    return;
 						}
 
 						NSString* urlString = [publicKeyUrl absoluteString];
