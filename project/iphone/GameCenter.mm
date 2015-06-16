@@ -219,15 +219,12 @@ namespace gamecenter {
 					UIViewController *glView2 = [[[UIApplication sharedApplication] keyWindow] rootViewController];
 					[glView2 presentModalViewController: viewcontroller animated : NO];
 					
-				} else if (error != nil) {
-					
-					NSLog (@"Game Center: Error occurred authenticating-");
-					NSLog (@"  %@", [error localizedDescription]);
-					NSString* errorDescription = [error localizedDescription];
-					sendGameCenterEvent (AUTH_FAILURE, [errorDescription UTF8String], "", "", "");
-					
 				}
-				
+
+				NSString * errormsg = error == nil ? @"unknown" : [error localizedDescription];
+				NSLog (@"Game Center: Error occurred authenticating-");
+				NSLog (@"  %@", errormsg);
+				sendGameCenterEvent (AUTH_FAILURE, [errormsg UTF8String], "", "", "");
 			})];
 			
 		} else {
