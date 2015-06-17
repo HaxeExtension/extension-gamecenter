@@ -6,7 +6,7 @@ import flash.events.Event;
 
 class GameCenterEvent extends Event {
 	
-	
+	public static inline var DISABLED = "disabled";
 	public static inline var AUTH_SUCCESS = "authSuccess";
 	public static inline var AUTH_ALREADY = "authAlready";
 	public static inline var AUTH_FAILURE = "authFailure";

@@ -108,6 +108,7 @@ namespace gamecenter {
 	
 	//Events
 	
+	static const char* DISABLED = "disabled";
 	static const char* AUTH_SUCCESS = "authSuccess";
 	static const char* AUTH_ALREADY = "authAlready";
 	static const char* AUTH_FAILURE = "authFailure";
@@ -179,6 +180,7 @@ namespace gamecenter {
 		if (!isGameCenterAvailable ()) {
 			
 			NSLog (@"Game Center: is not available");
+			sendGameCenterEvent (DISABLED, "", "", "", "");
 			return;
 			
 		}
