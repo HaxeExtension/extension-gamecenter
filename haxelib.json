@@ -1,11 +1,11 @@
 {
-	"name": "gamecenter",
+	"name": "extension-gamecenter",
 	"url": "http://www.openfl.org",
 	"license": "MIT",
 	"tags": [],
 	"description": "Adds iOS GameCenter support",
-	"version": "1.1.1",
-	"releasenote": "Add ability to hide achievement banner",
+	"version": "1.2.0",
+	"releasenote": "Crash fixes",
 	"contributors": [ "singmajesty" ],
 	"dependencies": {}
 }
