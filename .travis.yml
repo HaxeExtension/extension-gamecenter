@@ -10,7 +10,6 @@ before_install:
   - haxelib install lime > /dev/null
   - haxelib list
   - haxelib dev extension-gamecenter $(pwd)
-  - gem install travis-artifacts --no-ri --no-rdoc
 
 script:
   - haxelib run lime rebuild extension-gamecenter ios
