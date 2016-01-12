@@ -2,15 +2,8 @@ language: haxe
 
 haxe:
   - "3.2.0"
-env:
- global:
-  - ARTIFACTS_AWS_REGION=us-west-2
-  - ARTIFACTS_S3_BUCKET=gamecenter-artifacts
-  - secure: "LMd6UhjDEUEnOvWIwyvTGvdPlwC5s0FsXGOrtNd3B0L1ylZVH98uVIf7hrxocQ8gmcfV4tOT+3ObkiUvgD93HPKyjPBGLx8VzveZTdmp9DDFzVTrLpPnv7ynnW5F6r2K3Ohtu67ZJNy0bZ8GfLiSfgV1PL/dRfA7oIQVMbKebN8="
-  - secure: "NYXsXEKm8tbF7NDEMK2pmXmiykaAB6dv7tRRxvli8xkPFUzAf43slbtkoMo0pOAtaVsHZUndVBxHzOastwqxSM5k1Zp3sCx0GCZWvSLAj7yU/UVYa1kKoWWGZMTy4gEZMvKV9YKGoIgtNvXlpUQTDa3b7pNSnkYIq5EtKR7zCBU="
 
 before_install:
-
   # Setup Haxe and continue
   - haxelib install format > /dev/null
   - haxelib install hxcpp > /dev/null
@@ -21,10 +14,3 @@ before_install:
 
 script:
   - haxelib run lime rebuild extension-gamecenter ios
-
-after_success:
-  - export COMMIT_NAME=`git describe --tags`
-  - cd ..
-  - zip -r gamecenter-$COMMIT_NAME.zip gamecenter/ -x *.git* -x *.DS_Store* -x *project/obj* -x *project/all_objs*
-  - travis-artifacts upload --path gamecenter-$COMMIT_NAME.zip --target-path artifacts
-  - wget -qO- http://www.openfl.org/gamecenter-post-hook.php?commit=$COMMIT_NAME
