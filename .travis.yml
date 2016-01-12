@@ -12,4 +12,4 @@ before_install:
   - haxelib dev extension-gamecenter $(pwd)
 
 script:
-  - haxelib run lime rebuild extension-gamecenter ios
+  - haxelib run lime rebuild extension-gamecenter cpp
