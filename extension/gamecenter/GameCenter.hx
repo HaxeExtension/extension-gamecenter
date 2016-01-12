@@ -179,12 +179,27 @@ class GameCenter {
 		
 	}
 	
+	public static function getAchievementSteps(achievementID:String):Void {
+		initialize ();
+		#if ios
+			gamecenter_getAchievementSteps(achievementID);
+		#end
+	}
+
+	public static function getAchievementStatus(achievementID:String):Void {
+		initialize ();
+		#if ios
+			gamecenter_getAchievementStatus(achievementID);
+		#end
+	}
+	public static function getPlayerScore(leaderboardID:String):Void {
+		initialize ();
+		#if ios
+			gamecenter_getPlayerScore(leaderboardID);
+		#end
+	}
 	
-	
-	
-	// Get & Set Methods
-	
-	
+	// Get & Set Methods	
 	
 	
 	private static function get_available ():Bool {
@@ -202,9 +217,6 @@ class GameCenter {
 	
 	// Native Methods
 	
-	
-	
-	
 	#if ios
 	private static var gamecenter_set_event_handle = Lib.load ("gamecenter", "gamecenter_set_event_handle", 1);
 	private static var gamecenter_initialize = Lib.load ("gamecenter", "gamecenter_initialize", 0);
@@ -218,6 +230,10 @@ class GameCenter {
 	private static var gamecenter_reportscore = Lib.load ("gamecenter", "gamecenter_reportscore", 2);
 	private static var gamecenter_reportachievement = Lib.load ("gamecenter", "gamecenter_reportachievement", 3);
 	private static var gamecenter_resetachievements = Lib.load ("gamecenter", "gamecenter_resetachievements", 0);
+	private static var gamecenter_getAchievementSteps = Lib.load ("gamecenter", "gamecenter_getAchievementSteps", 1);
+	private static var gamecenter_getAchievementStatus = Lib.load ("gamecenter", "gamecenter_getAchievementStatus", 1);
+	private static var gamecenter_getPlayerScore = Lib.load ("gamecenter", "gamecenter_getPlayerScore", 1);
+
 	#end
 	
 	
