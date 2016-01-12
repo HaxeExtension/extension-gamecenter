@@ -143,6 +143,35 @@ static value gamecenter_resetachievements()
 DEFINE_PRIM(gamecenter_resetachievements, 0);
 
 
+static value gamecenter_getAchievementSteps(value achievementID)
+{
+	#ifdef IPHONE
+		getAchievementSteps(val_string(achievementID));
+	#endif
+	return alloc_null();
+}
+DEFINE_PRIM(gamecenter_getAchievementSteps, 1);
+
+
+static value gamecenter_getAchievementStatus(value achievementID)
+{
+	#ifdef IPHONE
+		getAchievementStatus(val_string(achievementID));
+	#endif
+	return alloc_null();
+}
+DEFINE_PRIM(gamecenter_getAchievementStatus, 1);
+
+
+static value gamecenter_getPlayerScore(value leaderboardID)
+{
+	#ifdef IPHONE
+		getPlayerScore(val_string(leaderboardID));
+	#endif
+	return alloc_null();
+}
+DEFINE_PRIM(gamecenter_getPlayerScore, 1);
+
 
 extern "C" void gamecenter_main() 
 {	

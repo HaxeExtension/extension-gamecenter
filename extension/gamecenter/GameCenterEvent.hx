@@ -16,6 +16,13 @@ class GameCenterEvent extends Event {
 	public static inline var ACHIEVEMENT_FAILURE = "achievementFailure";
 	public static inline var ACHIEVEMENT_RESET_SUCCESS = "achievementResetSuccess";
 	public static inline var ACHIEVEMENT_RESET_FAILURE = "achievementResetFailure";
+
+	public static inline var ON_GET_ACHIEVEMENT_STATUS_FAILURE = "onGetAchievementStatusFailure";
+	public static inline var ON_GET_ACHIEVEMENT_STATUS_SUCESS = "onGetAchievementStatusSucess";
+	public static inline var ON_GET_ACHIEVEMENT_STEPS_FAILURE = "onGetAchievementStepsFailure"; 
+	public static inline var ON_GET_ACHIEVEMENT_STEPS_SUCESS = "onGetAchievementSteps";
+	public static inline var ON_GET_PLAYER_SCORE_FAILURE = "onGetPlayerScoreFailure";
+	public static inline var ON_GET_PLAYER_SCORE_SUCESS = "onGetPlayerScoreSucess";
 	
 	public var data1 : String;
 	public var data2 : String;

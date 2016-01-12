@@ -118,7 +118,13 @@ namespace gamecenter {
 	static const char* ACHIEVEMENT_FAILURE = "achievementFailure";
 	static const char* ACHIEVEMENT_RESET_SUCCESS = "achievementResetSuccess";
 	static const char* ACHIEVEMENT_RESET_FAILURE = "achievementResetFailure";
-	
+
+	static const char* ON_GET_ACHIEVEMENT_STATUS_FAILURE = "onGetAchievementStatusFailure";
+	static const char* ON_GET_ACHIEVEMENT_STATUS_SUCESS = "onGetAchievementStatusSucess";
+	static const char* ON_GET_ACHIEVEMENT_STEPS_FAILURE = "onGetAchievementStepsFailure"; 
+	static const char* ON_GET_ACHIEVEMENT_STEPS_SUCESS = "onGetAchievementSteps";
+	static const char* ON_GET_PLAYER_SCORE_FAILURE = "onGetPlayerScoreFailure";
+	static const char* ON_GET_PLAYER_SCORE_SUCESS = "onGetPlayerScoreSucess";
 	
 	//---
 	
@@ -342,12 +348,32 @@ namespace gamecenter {
 		
 	}
 	
-	
-	
-	
+	void getPlayerScore(const char* leaderboardID) {
+
+		NSString* strLeaderboard = [[NSString alloc] initWithUTF8String:leaderboardID];
+		GKLeaderboard* leaderboardRequest = [[GKLeaderboard alloc] init];
+		leaderboardRequest.identifier = strLeaderboard;
+		
+		[leaderboardRequest loadScoresWithCompletionHandler: ^(NSArray *scores, NSError *error) {
+			if (error != nil) {
+				// Handle the error.
+				NSLog (@"Game Center: Error occurred getting score-");
+				NSLog (@"  %@", [error userInfo]);				
+				sendGameCenterEvent (ON_GET_PLAYER_SCORE_FAILURE, leaderboardID, "", "", "");
+			}
+			if (scores != nil) {
+				// Process the score information.
+				GKScore* localPlayerScore = leaderboardRequest.localPlayerScore;
+				NSString* myString = [NSString stringWithFormat:@"%lld", localPlayerScore.value];
+				NSLog (@"Game Center: Player score was successfully obtained");
+				sendGameCenterEvent (ON_GET_PLAYER_SCORE_SUCESS, leaderboardID, [myString UTF8String], "", "");			
+			}
+		}];
+		[strLeaderboard release];	
+	}
+
 	//ACHIEVEMENTS
-	
-	
+		
 	
 	
 	void showAchievements () {
@@ -440,11 +466,61 @@ namespace gamecenter {
 		
 	}
 	
-	
-	
-	
+	void getAchievementSteps(const char* achievementID) {
+
+		NSString* strAchievementInput = [[NSString alloc] initWithUTF8String:achievementID];
+
+		[GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *error) {
+			if (error != nil) {
+				NSLog (@"Game Center: Error occurred getting achievements array-");
+				NSLog (@"  %@", [error userInfo]);				
+				sendGameCenterEvent (ON_GET_ACHIEVEMENT_STEPS_FAILURE, achievementID, "", "", "");
+			}
+			if (achievements != nil) {
+				// Process the array of achievements.
+				for (GKAchievement* achievement in achievements) {
+					if ([achievement.identifier isEqualToString:strAchievementInput]) {
+						NSString* myString = [NSString stringWithFormat:@"%.2f", achievement.percentComplete];
+						NSLog (@"Game Center: Achievement percent was successfully obtained");
+						sendGameCenterEvent (ON_GET_ACHIEVEMENT_STEPS_SUCESS, achievementID, [myString UTF8String], "", "");
+						return;
+					}
+				}
+			}
+		}];
+	}
+
+	void getAchievementStatus(const char* achievementID) {
+
+		NSString* strAchievementInput = [[NSString alloc] initWithUTF8String:achievementID];
+
+		[GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *error) {
+			if (error != nil) {
+				NSLog (@"Game Center: Error occurred getting achievements array-");
+				NSLog (@"  %@", [error userInfo]);				
+				sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_FAILURE, achievementID, "", "", "");
+			}
+			if (achievements != nil) {
+				// Process the array of achievements.
+				for (GKAchievement* achievement in achievements) {
+					if ([achievement.identifier isEqualToString:strAchievementInput]) {
+						if (achievement.completed) {
+							NSLog (@"Game Center: Achievement status was successfully obtained");
+							NSString* status = @"Completed";
+							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCESS, achievementID, [status UTF8String], "", "");
+						} else {
+							NSLog (@"Game Center: Achievement status was successfully obtained");
+							NSString* status = @"Not Completed";
+							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCESS, achievementID, [status UTF8String], "", "");
+						}
+					}
+					return;
+				}
+			}
+		}];
+	}
+
 	//CALLBACKS
-	
 	
 	
 	
