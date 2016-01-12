@@ -16,12 +16,15 @@ namespace gamecenter
     //Leaderboards
     void showLeaderboard(const char* categoryID);
     void reportScore(const char* categoryID, int score);
+    void getPlayerScore(const char* leaderboardID);
     
     //Achievements
     void showAchievements();
     void resetAchievements();
     void reportAchievement(const char* achievementID, float percent, bool showCompletionBanner);
-    
+    void getAchievementSteps(const char* achievementID);
+    void getAchievementStatus(const char* achievementID);
+
     //Other
     void registerForAuthenticationNotification();
 }
