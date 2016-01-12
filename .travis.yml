@@ -12,9 +12,10 @@ env:
 before_install:
 
   # Setup Haxe and continue
-  - haxelib install format
-  - haxelib install hxcpp
-  - haxelib install lime
+  - haxelib install format > /dev/null
+  - haxelib install hxcpp > /dev/null
+  - haxelib install lime > /dev/null
+  - haxelib list
   - haxelib dev extension-gamecenter $(pwd)
   - gem install travis-artifacts --no-ri --no-rdoc
 
