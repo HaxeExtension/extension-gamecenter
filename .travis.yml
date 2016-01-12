@@ -4,6 +4,7 @@ haxe:
   - "3.2.0"
 
 before_install:
+  - sudo apt-get install g++-multilib
   # Setup Haxe and continue
   - haxelib install format > /dev/null
   - haxelib install hxcpp > /dev/null
