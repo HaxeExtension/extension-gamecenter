@@ -121,8 +121,8 @@ namespace gamecenter {
 
 	static const char* ON_GET_ACHIEVEMENT_STATUS_FAILURE = "onGetAchievementStatusFailure";
 	static const char* ON_GET_ACHIEVEMENT_STATUS_SUCESS = "onGetAchievementStatusSucess";
-	static const char* ON_GET_ACHIEVEMENT_STEPS_FAILURE = "onGetAchievementStepsFailure"; 
-	static const char* ON_GET_ACHIEVEMENT_STEPS_SUCESS = "onGetAchievementSteps";
+	static const char* ON_GET_ACHIEVEMENT_PROGRESS_FAILURE = "onGetAchievementProgressFailure"; 
+	static const char* ON_GET_ACHIEVEMENT_PROGRESS_SUCESS = "onGetAchievementProgressSucess";
 	static const char* ON_GET_PLAYER_SCORE_FAILURE = "onGetPlayerScoreFailure";
 	static const char* ON_GET_PLAYER_SCORE_SUCESS = "onGetPlayerScoreSucess";
 	
@@ -466,7 +466,7 @@ namespace gamecenter {
 		
 	}
 	
-	void getAchievementSteps(const char* achievementID) {
+	void getAchievementProgress(const char* achievementID) {
 
 		NSString* strAchievementInput = [[NSString alloc] initWithUTF8String:achievementID];
 
@@ -474,7 +474,7 @@ namespace gamecenter {
 			if (error != nil) {
 				NSLog (@"Game Center: Error occurred getting achievements array-");
 				NSLog (@"  %@", [error userInfo]);				
-				sendGameCenterEvent (ON_GET_ACHIEVEMENT_STEPS_FAILURE, achievementID, "", "", "");
+				sendGameCenterEvent (ON_GET_ACHIEVEMENT_PROGRESS_FAILURE, achievementID, "", "", "");
 			}
 			if (achievements != nil) {
 				// Process the array of achievements.
@@ -482,7 +482,7 @@ namespace gamecenter {
 					if ([achievement.identifier isEqualToString:strAchievementInput]) {
 						NSString* myString = [NSString stringWithFormat:@"%.2f", achievement.percentComplete];
 						NSLog (@"Game Center: Achievement percent was successfully obtained");
-						sendGameCenterEvent (ON_GET_ACHIEVEMENT_STEPS_SUCESS, achievementID, [myString UTF8String], "", "");
+						sendGameCenterEvent (ON_GET_ACHIEVEMENT_PROGRESS_SUCESS, achievementID, [myString UTF8String], "", "");
 						return;
 					}
 				}
