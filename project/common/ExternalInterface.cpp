@@ -143,14 +143,14 @@ static value gamecenter_resetachievements()
 DEFINE_PRIM(gamecenter_resetachievements, 0);
 
 
-static value gamecenter_getAchievementSteps(value achievementID)
+static value gamecenter_getAchievementProgress(value achievementID)
 {
 	#ifdef IPHONE
-		getAchievementSteps(val_string(achievementID));
+		getAchievementProgress(val_string(achievementID));
 	#endif
 	return alloc_null();
 }
-DEFINE_PRIM(gamecenter_getAchievementSteps, 1);
+DEFINE_PRIM(gamecenter_getAchievementProgress, 1);
 
 
 static value gamecenter_getAchievementStatus(value achievementID)

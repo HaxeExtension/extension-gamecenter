@@ -19,8 +19,8 @@ class GameCenterEvent extends Event {
 
 	public static inline var ON_GET_ACHIEVEMENT_STATUS_FAILURE = "onGetAchievementStatusFailure";
 	public static inline var ON_GET_ACHIEVEMENT_STATUS_SUCESS = "onGetAchievementStatusSucess";
-	public static inline var ON_GET_ACHIEVEMENT_STEPS_FAILURE = "onGetAchievementStepsFailure"; 
-	public static inline var ON_GET_ACHIEVEMENT_STEPS_SUCESS = "onGetAchievementSteps";
+	public static inline var ON_GET_ACHIEVEMENT_PROGRESS_FAILURE = "onGetAchievementProgressFailure"; 
+	public static inline var ON_GET_ACHIEVEMENT_PROGRESS_SUCESS = "onGetAchievementProgressSucess";
 	public static inline var ON_GET_PLAYER_SCORE_FAILURE = "onGetPlayerScoreFailure";
 	public static inline var ON_GET_PLAYER_SCORE_SUCESS = "onGetPlayerScoreSucess";
 	
@@ -28,7 +28,6 @@ class GameCenterEvent extends Event {
 	public var data2 : String;
 	public var data3 : String;
 	public var data4 : String;
-
 
 	public function new (type:String, data1:String, data2:String, data3:String, data4:String) {
 		
