@@ -178,8 +178,8 @@ class GameCenter {
 		#end
 		
 	}
-	
-	public static function getAchievementCurrentProgress(achievementID:String):Void {
+	 
+	public static function getAchievementProgress(achievementID:String):Void {
 		initialize ();
 		#if ios
 			gamecenter_getAchievementProgress(achievementID);
