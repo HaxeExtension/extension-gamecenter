@@ -22,7 +22,7 @@ namespace gamecenter
     void showAchievements();
     void resetAchievements();
     void reportAchievement(const char* achievementID, float percent, bool showCompletionBanner);
-    void getAchievementSteps(const char* achievementID);
+    void getAchievementProgress(const char* achievementID);
     void getAchievementStatus(const char* achievementID);
 
     //Other
