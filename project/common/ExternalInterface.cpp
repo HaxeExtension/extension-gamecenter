@@ -92,6 +92,16 @@ static value gamecenter_playerid()
 }
 DEFINE_PRIM(gamecenter_playerid, 0);
 
+static value gamecenter_playerfriends()
+{
+	#ifdef IPHONE
+	getPlayerFriends();
+	#else
+	return alloc_null();
+	#endif
+}
+DEFINE_PRIM(gamecenter_playerfriends, 0);
+
 
 static value gamecenter_showachievements()
 {

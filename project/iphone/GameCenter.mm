@@ -82,6 +82,7 @@ namespace gamecenter {
 	
 	const char* getPlayerName ();
 	const char* getPlayerID ();
+	void getPlayerFriends ();
 	
 	
 	//Leaderboards
@@ -120,11 +121,14 @@ namespace gamecenter {
 	static const char* ACHIEVEMENT_RESET_FAILURE = "achievementResetFailure";
 
 	static const char* ON_GET_ACHIEVEMENT_STATUS_FAILURE = "onGetAchievementStatusFailure";
-	static const char* ON_GET_ACHIEVEMENT_STATUS_SUCESS = "onGetAchievementStatusSucess";
+	static const char* ON_GET_ACHIEVEMENT_STATUS_SUCCESS = "onGetAchievementStatusSuccess";
 	static const char* ON_GET_ACHIEVEMENT_PROGRESS_FAILURE = "onGetAchievementProgressFailure"; 
-	static const char* ON_GET_ACHIEVEMENT_PROGRESS_SUCESS = "onGetAchievementProgressSucess";
+	static const char* ON_GET_ACHIEVEMENT_PROGRESS_SUCCESS = "onGetAchievementProgressSuccess";
 	static const char* ON_GET_PLAYER_SCORE_FAILURE = "onGetPlayerScoreFailure";
-	static const char* ON_GET_PLAYER_SCORE_SUCESS = "onGetPlayerScoreSucess";
+	static const char* ON_GET_PLAYER_SCORE_SUCCESS = "onGetPlayerScoreSuccess";
+
+	static const char* ON_GET_PLAYER_FRIENDS_FAILURE = "onGetPlayerFriendsFailure";
+	static const char* ON_GET_PLAYER_FRIENDS_SUCCESS = "onGetPlayerFriendsSuccess";
 	
 	//---
 	
@@ -282,15 +286,36 @@ namespace gamecenter {
 		}
 		
 	}
-	
-	
-	
+
+	void getPlayerFriends () {
+		NSLog(@"starting getPlayerFriends \n");
+		GKLocalPlayer *lp = [GKLocalPlayer localPlayer]; 
+		if (lp.authenticated) { 
+			[lp loadFriendPlayersWithCompletionHandler:^(NSArray <GKPlayer *> *friends, NSError *error) {
+            	NSLog(@" getPlayerFriends 4 \n");
+            	if (error != nil) {
+      				NSLog(@"error loading friends! %@", [error localizedDescription]);
+       				sendGameCenterEvent(ON_GET_PLAYER_FRIENDS_FAILURE, "{}", "", "", "");
+            	} 
+				if (friends != nil) {
+					NSString *idsJSONString = @"";
+					NSMutableArray* ids = [NSMutableArray array];
+					for(GKPlayer *p in friends){
+						[ids addObject:p.playerID ];
+					}
+					NSData *idsJSONData = [NSJSONSerialization dataWithJSONObject:ids options:NSJSONWritingPrettyPrinted error:&error];
+					idsJSONString = [[NSString alloc] initWithData:idsJSONData encoding:NSUTF8StringEncoding] ;
+					NSLog(@"friends retrieved successfully!!!: %@", idsJSONString);
+					NSLog(@"idsJSONString: %@", idsJSONString);
+					const char* idString = (const char*)[idsJSONString UTF8String]; 
+					sendGameCenterEvent(ON_GET_PLAYER_FRIENDS_SUCCESS, idString, "", "", "");
+				}
+			}];
+		}
+	}
 	
 	//LEADERBOARDS
-	
-	
-	
-	
+
 	void showLeaderboard (const char* categoryID) {
 		
 		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -366,7 +391,7 @@ namespace gamecenter {
 				GKScore* localPlayerScore = leaderboardRequest.localPlayerScore;
 				NSString* myString = [NSString stringWithFormat:@"%lld", localPlayerScore.value];
 				NSLog (@"Game Center: Player score was successfully obtained");
-				sendGameCenterEvent (ON_GET_PLAYER_SCORE_SUCESS, leaderboardID, [myString UTF8String], "", "");			
+				sendGameCenterEvent (ON_GET_PLAYER_SCORE_SUCCESS, leaderboardID, [myString UTF8String], "", "");			
 			}
 		}];
 		[strLeaderboard release];	
@@ -482,7 +507,7 @@ namespace gamecenter {
 					if ([achievement.identifier isEqualToString:strAchievementInput]) {
 						NSString* myString = [NSString stringWithFormat:@"%.2f", achievement.percentComplete];
 						NSLog (@"Game Center: Achievement percent was successfully obtained");
-						sendGameCenterEvent (ON_GET_ACHIEVEMENT_PROGRESS_SUCESS, achievementID, [myString UTF8String], "", "");
+						sendGameCenterEvent (ON_GET_ACHIEVEMENT_PROGRESS_SUCCESS, achievementID, [myString UTF8String], "", "");
 						return;
 					}
 				}
@@ -507,11 +532,11 @@ namespace gamecenter {
 						if (achievement.completed) {
 							NSLog (@"Game Center: Achievement status was successfully obtained");
 							NSString* status = @"Completed";
-							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCESS, achievementID, [status UTF8String], "", "");
+							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCCESS, achievementID, [status UTF8String], "", "");
 						} else {
 							NSLog (@"Game Center: Achievement status was successfully obtained");
 							NSString* status = @"Not Completed";
-							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCESS, achievementID, [status UTF8String], "", "");
+							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCCESS, achievementID, [status UTF8String], "", "");
 						}
 					}
 					return;
