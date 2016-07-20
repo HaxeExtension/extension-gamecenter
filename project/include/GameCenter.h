@@ -1,7 +1,6 @@
 #ifndef GAME_CENTER_H
 #define GAME_CENTER_H
 
-
 namespace gamecenter 
 {	
     //User
@@ -12,6 +11,8 @@ namespace gamecenter
     
     const char* getPlayerName();
     const char* getPlayerID();
+    void getPlayerFriends();
+    void getPhoto(const char* playerID);
     
     //Leaderboards
     void showLeaderboard(const char* categoryID);
