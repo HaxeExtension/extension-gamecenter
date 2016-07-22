@@ -82,6 +82,7 @@ namespace gamecenter {
 	
 	const char* getPlayerName ();
 	const char* getPlayerID ();
+	void getPlayerFriends ();
 	
 	
 	//Leaderboards
@@ -120,11 +121,16 @@ namespace gamecenter {
 	static const char* ACHIEVEMENT_RESET_FAILURE = "achievementResetFailure";
 
 	static const char* ON_GET_ACHIEVEMENT_STATUS_FAILURE = "onGetAchievementStatusFailure";
-	static const char* ON_GET_ACHIEVEMENT_STATUS_SUCESS = "onGetAchievementStatusSucess";
+	static const char* ON_GET_ACHIEVEMENT_STATUS_SUCCESS = "onGetAchievementStatusSuccess";
 	static const char* ON_GET_ACHIEVEMENT_PROGRESS_FAILURE = "onGetAchievementProgressFailure"; 
-	static const char* ON_GET_ACHIEVEMENT_PROGRESS_SUCESS = "onGetAchievementProgressSucess";
+	static const char* ON_GET_ACHIEVEMENT_PROGRESS_SUCCESS = "onGetAchievementProgressSuccess";
 	static const char* ON_GET_PLAYER_SCORE_FAILURE = "onGetPlayerScoreFailure";
-	static const char* ON_GET_PLAYER_SCORE_SUCESS = "onGetPlayerScoreSucess";
+	static const char* ON_GET_PLAYER_SCORE_SUCCESS = "onGetPlayerScoreSuccess";
+
+	static const char* ON_GET_PLAYER_FRIENDS_FAILURE = "onGetPlayerFriendsFailure";
+	static const char* ON_GET_PLAYER_FRIENDS_SUCCESS = "onGetPlayerFriendsSuccess";
+	static const char* ON_GET_PLAYER_PHOTO_FAILURE = "onGetPlayerPhotoFailure";
+	static const char* ON_GET_PLAYER_PHOTO_SUCCESS = "onGetPlayerPhotoSuccess";
 	
 	//---
 	
@@ -282,15 +288,70 @@ namespace gamecenter {
 		}
 		
 	}
-	
-	
-	
+
+	void getPlayerFriends () {
+		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+		GKLocalPlayer *lp = [GKLocalPlayer localPlayer]; 
+		if (lp.authenticated) { 
+			[lp loadFriendPlayersWithCompletionHandler:^(NSArray <GKPlayer *> *friends, NSError *error) {
+            	if (error != nil) {
+      				NSLog(@"error loading friends! %@", [error localizedDescription]);
+       				sendGameCenterEvent(ON_GET_PLAYER_FRIENDS_FAILURE, "{}", "", "", "");
+            	} 
+				if (friends != nil) {
+					NSString *dataJSONString = @"";
+					NSMutableDictionary *playersData = [[NSMutableDictionary alloc] init];
+					for(GKPlayer *p in friends){
+						[playersData setObject:p.displayName forKey:p.playerID ];
+					}
+					NSData *playersJSONData = [NSJSONSerialization dataWithJSONObject:playersData options:NSJSONWritingPrettyPrinted error:&error];
+					dataJSONString = [[NSString alloc] initWithData:playersJSONData encoding:NSUTF8StringEncoding] ;
+					const char* dataString = (const char*)[dataJSONString UTF8String]; 
+					sendGameCenterEvent(ON_GET_PLAYER_FRIENDS_SUCCESS, dataString, "", "", "");
+					[dataJSONString release];
+				}
+			}];
+		}
+		[pool drain];
+	}
+
+	void getPhoto(const char* playerID){
+		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+		NSString *pid = [NSString stringWithUTF8String:playerID];
+		NSArray *array = [NSArray arrayWithObject:pid];
+		[GKPlayer loadPlayersForIdentifiers:array withCompletionHandler:^(NSArray <GKPlayer *> *players, NSError *error){
+			if (error != nil) {
+      			NSLog(@"error loading player! %@", [error localizedDescription]);
+       			sendGameCenterEvent(ON_GET_PLAYER_PHOTO_FAILURE, playerID, "", "", "");
+            } 
+            if (players != nil && [players count]>0) {
+				[[players firstObject] loadPhotoForSize:1 withCompletionHandler: ^(UIImage *photo, NSError *error2){
+					if (error2 != nil) {
+      					NSLog(@"error loading photo! %@", [error2 localizedDescription]);
+       					sendGameCenterEvent(ON_GET_PLAYER_PHOTO_FAILURE, playerID, "", "", "");
+            		} 
+            		if(photo != nil){
+            			NSData *photoData = UIImagePNGRepresentation(photo);
+            			NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+						NSString *cachesFolder = paths[0];
+						NSString *file = [NSString stringWithFormat:@"%@.png", [[players firstObject] playerID]];
+						NSString *path = [cachesFolder stringByAppendingPathComponent:file];
+            			if([photoData writeToFile:path atomically:YES]){
+            				sendGameCenterEvent(ON_GET_PLAYER_PHOTO_SUCCESS, playerID, [path UTF8String], "", "");
+            			} else {
+            				NSLog(@"error writing to file");
+            				sendGameCenterEvent(ON_GET_PLAYER_PHOTO_FAILURE, playerID, "", "", "");
+            			}
+            		} else {
+            		} 
+				}];
+			}
+		}]; 
+		[pool drain];
+	}
 	
 	//LEADERBOARDS
-	
-	
-	
-	
+
 	void showLeaderboard (const char* categoryID) {
 		
 		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -366,7 +427,7 @@ namespace gamecenter {
 				GKScore* localPlayerScore = leaderboardRequest.localPlayerScore;
 				NSString* myString = [NSString stringWithFormat:@"%lld", localPlayerScore.value];
 				NSLog (@"Game Center: Player score was successfully obtained");
-				sendGameCenterEvent (ON_GET_PLAYER_SCORE_SUCESS, leaderboardID, [myString UTF8String], "", "");			
+				sendGameCenterEvent (ON_GET_PLAYER_SCORE_SUCCESS, leaderboardID, [myString UTF8String], "", "");			
 			}
 		}];
 		[strLeaderboard release];	
@@ -482,7 +543,7 @@ namespace gamecenter {
 					if ([achievement.identifier isEqualToString:strAchievementInput]) {
 						NSString* myString = [NSString stringWithFormat:@"%.2f", achievement.percentComplete];
 						NSLog (@"Game Center: Achievement percent was successfully obtained");
-						sendGameCenterEvent (ON_GET_ACHIEVEMENT_PROGRESS_SUCESS, achievementID, [myString UTF8String], "", "");
+						sendGameCenterEvent (ON_GET_ACHIEVEMENT_PROGRESS_SUCCESS, achievementID, [myString UTF8String], "", "");
 						return;
 					}
 				}
@@ -507,11 +568,11 @@ namespace gamecenter {
 						if (achievement.completed) {
 							NSLog (@"Game Center: Achievement status was successfully obtained");
 							NSString* status = @"Completed";
-							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCESS, achievementID, [status UTF8String], "", "");
+							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCCESS, achievementID, [status UTF8String], "", "");
 						} else {
 							NSLog (@"Game Center: Achievement status was successfully obtained");
 							NSString* status = @"Not Completed";
-							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCESS, achievementID, [status UTF8String], "", "");
+							sendGameCenterEvent (ON_GET_ACHIEVEMENT_STATUS_SUCCESS, achievementID, [status UTF8String], "", "");
 						}
 					}
 					return;
