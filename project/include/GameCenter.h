@@ -12,7 +12,6 @@ namespace gamecenter
     const char* getPlayerName();
     const char* getPlayerID();
     void getPlayerFriends();
-    void getPhoto(const char* playerID);
     
     //Leaderboards
     void showLeaderboard(const char* categoryID);

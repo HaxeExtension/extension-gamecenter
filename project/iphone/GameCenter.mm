@@ -129,8 +129,6 @@ namespace gamecenter {
 
 	static const char* ON_GET_PLAYER_FRIENDS_FAILURE = "onGetPlayerFriendsFailure";
 	static const char* ON_GET_PLAYER_FRIENDS_SUCCESS = "onGetPlayerFriendsSuccess";
-	static const char* ON_GET_PLAYER_PHOTO_FAILURE = "onGetPlayerPhotoFailure";
-	static const char* ON_GET_PLAYER_PHOTO_SUCCESS = "onGetPlayerPhotoSuccess";
 	
 	//---
 	
@@ -290,64 +288,30 @@ namespace gamecenter {
 	}
 
 	void getPlayerFriends () {
-		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+		NSLog(@"starting getPlayerFriends \n");
 		GKLocalPlayer *lp = [GKLocalPlayer localPlayer]; 
 		if (lp.authenticated) { 
 			[lp loadFriendPlayersWithCompletionHandler:^(NSArray <GKPlayer *> *friends, NSError *error) {
+            	NSLog(@" getPlayerFriends 4 \n");
             	if (error != nil) {
       				NSLog(@"error loading friends! %@", [error localizedDescription]);
        				sendGameCenterEvent(ON_GET_PLAYER_FRIENDS_FAILURE, "{}", "", "", "");
             	} 
 				if (friends != nil) {
-					NSString *dataJSONString = @"";
-					NSMutableDictionary *playersData = [[NSMutableDictionary alloc] init];
+					NSString *idsJSONString = @"";
+					NSMutableArray* ids = [NSMutableArray array];
 					for(GKPlayer *p in friends){
-						[playersData setObject:p.displayName forKey:p.playerID ];
+						[ids addObject:p.playerID ];
 					}
-					NSData *playersJSONData = [NSJSONSerialization dataWithJSONObject:playersData options:NSJSONWritingPrettyPrinted error:&error];
-					dataJSONString = [[NSString alloc] initWithData:playersJSONData encoding:NSUTF8StringEncoding] ;
-					const char* dataString = (const char*)[dataJSONString UTF8String]; 
-					sendGameCenterEvent(ON_GET_PLAYER_FRIENDS_SUCCESS, dataString, "", "", "");
-					[dataJSONString release];
+					NSData *idsJSONData = [NSJSONSerialization dataWithJSONObject:ids options:NSJSONWritingPrettyPrinted error:&error];
+					idsJSONString = [[NSString alloc] initWithData:idsJSONData encoding:NSUTF8StringEncoding] ;
+					NSLog(@"friends retrieved successfully!!!: %@", idsJSONString);
+					NSLog(@"idsJSONString: %@", idsJSONString);
+					const char* idString = (const char*)[idsJSONString UTF8String]; 
+					sendGameCenterEvent(ON_GET_PLAYER_FRIENDS_SUCCESS, idString, "", "", "");
 				}
 			}];
 		}
-		[pool drain];
-	}
-
-	void getPhoto(const char* playerID){
-		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-		NSString *pid = [NSString stringWithUTF8String:playerID];
-		NSArray *array = [NSArray arrayWithObject:pid];
-		[GKPlayer loadPlayersForIdentifiers:array withCompletionHandler:^(NSArray <GKPlayer *> *players, NSError *error){
-			if (error != nil) {
-      			NSLog(@"error loading player! %@", [error localizedDescription]);
-       			sendGameCenterEvent(ON_GET_PLAYER_PHOTO_FAILURE, playerID, "", "", "");
-            } 
-            if (players != nil && [players count]>0) {
-				[[players firstObject] loadPhotoForSize:1 withCompletionHandler: ^(UIImage *photo, NSError *error2){
-					if (error2 != nil) {
-      					NSLog(@"error loading photo! %@", [error2 localizedDescription]);
-       					sendGameCenterEvent(ON_GET_PLAYER_PHOTO_FAILURE, playerID, "", "", "");
-            		} 
-            		if(photo != nil){
-            			NSData *photoData = UIImagePNGRepresentation(photo);
-            			NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-						NSString *cachesFolder = paths[0];
-						NSString *file = [NSString stringWithFormat:@"%@.png", [[players firstObject] playerID]];
-						NSString *path = [cachesFolder stringByAppendingPathComponent:file];
-            			if([photoData writeToFile:path atomically:YES]){
-            				sendGameCenterEvent(ON_GET_PLAYER_PHOTO_SUCCESS, playerID, [path UTF8String], "", "");
-            			} else {
-            				NSLog(@"error writing to file");
-            				sendGameCenterEvent(ON_GET_PLAYER_PHOTO_FAILURE, playerID, "", "", "");
-            			}
-            		} else {
-            		} 
-				}];
-			}
-		}]; 
-		[pool drain];
 	}
 	
 	//LEADERBOARDS

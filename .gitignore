@@ -1,6 +1,4 @@
 .DS_Store
 ndll/*/*.a
-ndll/
 ndll/*/*.ndll
 project/obj/*
-
