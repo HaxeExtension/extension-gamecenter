@@ -103,10 +103,17 @@ class GameCenter {
 
 		#if ios
 		gamecenter_playerfriends ();
-		#else 
-		return null;
 		#end
 
+	}
+
+	public static function getPlayerPhoto(playerID:String){
+
+		initialize();
+
+		#if ios
+		gamecenter_playerphoto(playerID);
+		#end
 	}
 	
 	
@@ -238,6 +245,7 @@ class GameCenter {
 	private static var gamecenter_playername = Lib.load ("gamecenter", "gamecenter_playername", 0);
 	private static var gamecenter_playerid = Lib.load ("gamecenter", "gamecenter_playerid", 0);
 	private static var gamecenter_playerfriends = Lib.load("gamecenter", "gamecenter_playerfriends", 0);
+	private static var gamecenter_playerphoto = Lib.load("gamecenter", "gamecenter_playerphoto", 1);
 	private static var gamecenter_showleaderboard = Lib.load ("gamecenter", "gamecenter_showleaderboard", 1);
 	private static var gamecenter_showachievements = Lib.load ("gamecenter", "gamecenter_showachievements", 0);
 	private static var gamecenter_reportscore = Lib.load ("gamecenter", "gamecenter_reportscore", 2);
