@@ -6,7 +6,6 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
-import flash.Lib;
 
 
 class GameCenter {
@@ -35,7 +34,11 @@ class GameCenter {
 		initialize ();
 		
 		#if ios
-		Lib.pause ();
+		#if (openfl_next || openf_legacy || nme)
+			openfl.Lib.pause ();
+		#else
+			openfl.system.System.pause ();
+		#end
 		gamecenter_authenticate ();
 		#end
 		
@@ -121,7 +124,11 @@ class GameCenter {
 		
 		#if ios
 		
-		Lib.resume ();
+		#if (openfl_next || openf_legacy || nme)
+			openfl.Lib.resume ();
+		#else
+			openfl.system.System.resume ();
+		#end
 		
 		var type = Std.string (Reflect.field (inEvent, "type"));
 		var data1 = Std.string (Reflect.field (inEvent, "data1"));
@@ -180,7 +187,11 @@ class GameCenter {
 		initialize ();
 		
 		#if ios
-		//Lib.pause ();
+		// #if (openfl_next || openf_legacy || nme)
+		// 	openfl.Lib.pause ();
+		// #else
+		// 	openfl.system.System.pause ();
+		// #end
 		gamecenter_showachievements ();
 		#end
 		
@@ -192,7 +203,11 @@ class GameCenter {
 		initialize ();
 		
 		#if ios
-		//Lib.pause ();
+		// #if (openfl_next || openf_legacy || nme)
+		// 	openfl.Lib.pause ();
+		// #else
+		// 	openfl.system.System.pause ();
+		// #end
 		gamecenter_showleaderboard (categoryID);
 		#end
 		
@@ -237,23 +252,23 @@ class GameCenter {
 	// Native Methods
 	
 	#if ios
-	private static var gamecenter_set_event_handle = Lib.load ("gamecenter", "gamecenter_set_event_handle", 1);
-	private static var gamecenter_initialize = Lib.load ("gamecenter", "gamecenter_initialize", 0);
-	private static var gamecenter_authenticate = Lib.load ("gamecenter", "gamecenter_authenticate", 0);
-	private static var gamecenter_isavailable = Lib.load ("gamecenter", "gamecenter_isavailable", 0);
-	private static var gamecenter_isauthenticated = Lib.load ("gamecenter", "gamecenter_isauthenticated", 0);
-	private static var gamecenter_playername = Lib.load ("gamecenter", "gamecenter_playername", 0);
-	private static var gamecenter_playerid = Lib.load ("gamecenter", "gamecenter_playerid", 0);
-	private static var gamecenter_playerfriends = Lib.load("gamecenter", "gamecenter_playerfriends", 0);
-	private static var gamecenter_playerphoto = Lib.load("gamecenter", "gamecenter_playerphoto", 1);
-	private static var gamecenter_showleaderboard = Lib.load ("gamecenter", "gamecenter_showleaderboard", 1);
-	private static var gamecenter_showachievements = Lib.load ("gamecenter", "gamecenter_showachievements", 0);
-	private static var gamecenter_reportscore = Lib.load ("gamecenter", "gamecenter_reportscore", 2);
-	private static var gamecenter_reportachievement = Lib.load ("gamecenter", "gamecenter_reportachievement", 3);
-	private static var gamecenter_resetachievements = Lib.load ("gamecenter", "gamecenter_resetachievements", 0);
-	private static var gamecenter_getAchievementProgress = Lib.load ("gamecenter", "gamecenter_getAchievementProgress", 1);
-	private static var gamecenter_getAchievementStatus = Lib.load ("gamecenter", "gamecenter_getAchievementStatus", 1);
-	private static var gamecenter_getPlayerScore = Lib.load ("gamecenter", "gamecenter_getPlayerScore", 1);
+	private static var gamecenter_set_event_handle = cpp.Lib.load ("gamecenter", "gamecenter_set_event_handle", 1);
+	private static var gamecenter_initialize = cpp.Lib.load ("gamecenter", "gamecenter_initialize", 0);
+	private static var gamecenter_authenticate = cpp.Lib.load ("gamecenter", "gamecenter_authenticate", 0);
+	private static var gamecenter_isavailable = cpp.Lib.load ("gamecenter", "gamecenter_isavailable", 0);
+	private static var gamecenter_isauthenticated = cpp.Lib.load ("gamecenter", "gamecenter_isauthenticated", 0);
+	private static var gamecenter_playername = cpp.Lib.load ("gamecenter", "gamecenter_playername", 0);
+	private static var gamecenter_playerid = cpp.Lib.load ("gamecenter", "gamecenter_playerid", 0);
+	private static var gamecenter_playerfriends = cpp.Lib.load("gamecenter", "gamecenter_playerfriends", 0);
+	private static var gamecenter_playerphoto = cpp.Lib.load("gamecenter", "gamecenter_playerphoto", 1);
+	private static var gamecenter_showleaderboard = cpp.Lib.load ("gamecenter", "gamecenter_showleaderboard", 1);
+	private static var gamecenter_showachievements = cpp.Lib.load ("gamecenter", "gamecenter_showachievements", 0);
+	private static var gamecenter_reportscore = cpp.Lib.load ("gamecenter", "gamecenter_reportscore", 2);
+	private static var gamecenter_reportachievement = cpp.Lib.load ("gamecenter", "gamecenter_reportachievement", 3);
+	private static var gamecenter_resetachievements = cpp.Lib.load ("gamecenter", "gamecenter_resetachievements", 0);
+	private static var gamecenter_getAchievementProgress = cpp.Lib.load ("gamecenter", "gamecenter_getAchievementProgress", 1);
+	private static var gamecenter_getAchievementStatus = cpp.Lib.load ("gamecenter", "gamecenter_getAchievementStatus", 1);
+	private static var gamecenter_getPlayerScore = cpp.Lib.load ("gamecenter", "gamecenter_getPlayerScore", 1);
 
 	#end
 	
