@@ -1,5 +1,6 @@
 .DS_Store
 ndll/*/*.a
 ndll/*/*.ndll
+!ndll/Mac64/*.ndll
 ndll/*/*.hash
 project/obj/*
