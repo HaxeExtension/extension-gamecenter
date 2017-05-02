@@ -21,7 +21,7 @@ AutoGCRoot* gameCenterEventHandle = 0;
 
 static value gamecenter_set_event_handle(value onEvent)
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	gameCenterEventHandle = new AutoGCRoot(onEvent);
 	#endif
 	return alloc_null();
@@ -31,7 +31,7 @@ DEFINE_PRIM(gamecenter_set_event_handle, 1);
 
 static value gamecenter_initialize() 
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	initializeGameCenter();
 	#endif
 	return alloc_null();
@@ -41,7 +41,7 @@ DEFINE_PRIM (gamecenter_initialize, 0);
 
 static value gamecenter_authenticate() 
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	authenticateLocalUser();
 	#endif
 	return alloc_null();
@@ -51,7 +51,7 @@ DEFINE_PRIM (gamecenter_authenticate, 0);
 
 static value gamecenter_isavailable()
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	return alloc_bool(isGameCenterAvailable());
 	#else
 	return alloc_bool(false);
@@ -62,7 +62,7 @@ DEFINE_PRIM(gamecenter_isavailable, 0);
 
 static value gamecenter_isauthenticated()
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	return alloc_bool(isUserAuthenticated());
 	#else
 	return alloc_bool(false);
@@ -73,7 +73,7 @@ DEFINE_PRIM(gamecenter_isauthenticated, 0);
 
 static value gamecenter_playername()
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	return alloc_string(getPlayerName());
 	#else
 	return alloc_null();
@@ -84,7 +84,7 @@ DEFINE_PRIM(gamecenter_playername, 0);
 
 static value gamecenter_playerid()
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	return alloc_string(getPlayerID());
 	#else
 	return alloc_null();
@@ -94,7 +94,7 @@ DEFINE_PRIM(gamecenter_playerid, 0);
 
 static value gamecenter_playerfriends()
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	getPlayerFriends();
 	#endif
 	return alloc_null();
@@ -103,7 +103,7 @@ DEFINE_PRIM(gamecenter_playerfriends, 0);
 
 static value gamecenter_playerphoto(value playerID)
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	getPhoto(val_string(playerID));
 	#endif
 	return alloc_null();
@@ -113,7 +113,7 @@ DEFINE_PRIM(gamecenter_playerphoto, 1);
 
 static value gamecenter_showachievements()
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	showAchievements();
 	#endif
 	return alloc_null();
@@ -123,7 +123,7 @@ DEFINE_PRIM(gamecenter_showachievements, 0);
 
 static value gamecenter_showleaderboard(value categoryID)
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	showLeaderboard(val_string(categoryID));
 	#endif
 	return alloc_null();
@@ -133,7 +133,7 @@ DEFINE_PRIM(gamecenter_showleaderboard, 1);
 
 static value gamecenter_reportscore(value categoryID, value score)
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	reportScore(val_string(categoryID), val_int(score));
 	#endif
 	return alloc_null();
@@ -143,7 +143,7 @@ DEFINE_PRIM(gamecenter_reportscore, 2);
 
 static value gamecenter_reportachievement(value achievementID, value percent, value showCompletionBanner)
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	reportAchievement(val_string(achievementID),val_float(percent),val_bool(showCompletionBanner));
 	#endif
 	return alloc_null();
@@ -153,7 +153,7 @@ DEFINE_PRIM(gamecenter_reportachievement, 3);
 
 static value gamecenter_resetachievements()
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 	resetAchievements();
 	#endif
 	return alloc_null();
@@ -163,7 +163,7 @@ DEFINE_PRIM(gamecenter_resetachievements, 0);
 
 static value gamecenter_getAchievementProgress(value achievementID)
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 		getAchievementProgress(val_string(achievementID));
 	#endif
 	return alloc_null();
@@ -173,7 +173,7 @@ DEFINE_PRIM(gamecenter_getAchievementProgress, 1);
 
 static value gamecenter_getAchievementStatus(value achievementID)
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 		getAchievementStatus(val_string(achievementID));
 	#endif
 	return alloc_null();
@@ -183,7 +183,7 @@ DEFINE_PRIM(gamecenter_getAchievementStatus, 1);
 
 static value gamecenter_getPlayerScore(value leaderboardID)
 {
-	#ifdef IPHONE
+	#if defined(IPHONE) || defined(HX_MACOS)
 		getPlayerScore(val_string(leaderboardID));
 	#endif
 	return alloc_null();

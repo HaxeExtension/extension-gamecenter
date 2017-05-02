@@ -33,8 +33,8 @@ class GameCenter {
 		
 		initialize ();
 		
-		#if ios
-		#if (openfl_next || openf_legacy || nme)
+		#if (ios || mac)
+		#if (openfl_next || openfl_legacy || nme)
 			openfl.Lib.pause ();
 		#else
 			openfl.system.System.pause ();
@@ -63,7 +63,7 @@ class GameCenter {
 		
 		if (!initialized) {
 			
-			#if ios
+			#if (ios || mac)
 			gamecenter_set_event_handle (notifyListeners);
 			gamecenter_initialize ();
 			#end
@@ -79,7 +79,7 @@ class GameCenter {
 		
 		initialize ();
 		
-		#if ios
+		#if (ios || mac)
 		return gamecenter_playername ();
 		#else
 		return null;
@@ -92,7 +92,7 @@ class GameCenter {
 		
 		initialize ();
 		
-		#if ios
+		#if (ios || mac)
 		return gamecenter_playerid ();
 		#else
 		return null;
@@ -104,7 +104,7 @@ class GameCenter {
 		
 		initialize();
 
-		#if ios
+		#if (ios || mac)
 		gamecenter_playerfriends ();
 		#end
 
@@ -114,7 +114,7 @@ class GameCenter {
 
 		initialize();
 
-		#if ios
+		#if (ios || mac)
 		gamecenter_playerphoto(playerID);
 		#end
 	}
@@ -122,9 +122,9 @@ class GameCenter {
 	
 	private static function notifyListeners (inEvent:Dynamic) {
 		
-		#if ios
+		#if (ios || mac)
 		
-		#if (openfl_next || openf_legacy || nme)
+		#if (openfl_next || openfl_legacy || nme)
 			openfl.Lib.resume ();
 		#else
 			openfl.system.System.resume ();
@@ -153,7 +153,7 @@ class GameCenter {
 		
 		initialize ();
 		
-		#if ios
+		#if (ios || mac)
 		gamecenter_reportachievement (achievementID, percentComplete, showCompletionBanner);
 		#end
 		
@@ -164,7 +164,7 @@ class GameCenter {
 		
 		initialize ();
 		
-		#if ios
+		#if (ios || mac)
 		gamecenter_reportscore (categoryID, score);
 		#end
 		
@@ -175,7 +175,7 @@ class GameCenter {
 		
 		initialize ();
 		
-		#if ios
+		#if (ios || mac)
 		gamecenter_resetachievements ();
 		#end
 		
@@ -186,8 +186,8 @@ class GameCenter {
 		
 		initialize ();
 		
-		#if ios
-		// #if (openfl_next || openf_legacy || nme)
+		#if (ios || mac)
+		// #if (openfl_next || openfl_legacy || nme)
 		// 	openfl.Lib.pause ();
 		// #else
 		// 	openfl.system.System.pause ();
@@ -202,8 +202,8 @@ class GameCenter {
 		
 		initialize ();
 		
-		#if ios
-		// #if (openfl_next || openf_legacy || nme)
+		#if (ios || mac)
+		// #if (openfl_next || openfl_legacy || nme)
 		// 	openfl.Lib.pause ();
 		// #else
 		// 	openfl.system.System.pause ();
@@ -215,20 +215,20 @@ class GameCenter {
 	 
 	public static function getAchievementProgress(achievementID:String):Void {
 		initialize ();
-		#if ios
+		#if (ios || mac)
 			gamecenter_getAchievementProgress(achievementID);
 		#end
 	}
 
 	public static function getAchievementStatus(achievementID:String):Void {
 		initialize ();
-		#if ios
+		#if (ios || mac)
 			gamecenter_getAchievementStatus(achievementID);
 		#end
 	}
 	public static function getPlayerScore(leaderboardID:String):Void {
 		initialize ();
-		#if ios
+		#if (ios || mac)
 			gamecenter_getPlayerScore(leaderboardID);
 		#end
 	}
@@ -238,7 +238,7 @@ class GameCenter {
 	
 	private static function get_available ():Bool {
 		
-		#if ios
+		#if (ios || mac)
 		return gamecenter_isavailable ();
 		#else
 		return false;
@@ -251,7 +251,7 @@ class GameCenter {
 	
 	// Native Methods
 	
-	#if ios
+	#if (ios || mac)
 	private static var gamecenter_set_event_handle = cpp.Lib.load ("gamecenter", "gamecenter_set_event_handle", 1);
 	private static var gamecenter_initialize = cpp.Lib.load ("gamecenter", "gamecenter_initialize", 0);
 	private static var gamecenter_authenticate = cpp.Lib.load ("gamecenter", "gamecenter_authenticate", 0);
