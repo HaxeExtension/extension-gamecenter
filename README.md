@@ -41,6 +41,12 @@ You can build the binaries using "lime rebuild"
 
     lime rebuild gamecenter ios
 
+For mac you need to add this to ```mac-toolchain.xml``` in ```linker id="dll"```
+```
+  <flag value="-framework"/>
+  <flag value="Gamekit"/>
+```
+
 To return to release builds:
 
     haxelib dev gamecenter
